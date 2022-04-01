@@ -26,7 +26,7 @@
 package main
 
 import (
-    "github.com/marmotedu/iam/pkg/log"
+    "github.com/rebirthmonkey/pkg/log"
 )
 
 func main() {
@@ -43,18 +43,17 @@ func main() {
 
 ```shell
 $ go run example1.go 
-2020-12-05 07:56:37.154	info	example/example2.go:12	This is a info message	{"int_key": 10}
-2020-12-05 07:56:37.154	warn	example/example2.go:13	This is a formatted warn message
+2022-04-01 11:40:59.596	INFO	examples/example1.go:12	This is a info message	{"int_key": 10}
+2022-04-01 11:40:59.596	WARN	examples/example1.go:13	This is a formatted warn message
 ```
 
 上述代码使用 `rebirthmonkey/pkg/log` 包默认的全局 `logger`，分别在 `Debug` 、`Info` 和 `Warn` 级别打印了一条日志。
 
 ### 初始化日志包
 
-可以使用 `Init` 来初始化一个日志包，如下：
+可以使用 `log.Init()` 函数来初始化日志包，如下：
 
 ```go
-// logger配置    
 opts := &log.Options{
     Level:            "debug",
     Format:           "console",
@@ -63,26 +62,24 @@ opts := &log.Options{
     OutputPaths:      []string{"test.log", "stdout"},
     ErrorOutputPaths: []string{"error.log"},
 }
-// 初始化全局logger    
+
 log.Init(opts)
 ```
 
-Format 支持 `console` 和 `json` 2 种格式：
-- console：输出为 text 格式。例如：`2020-12-05 08:12:02.324	DEBUG	example/example.go:43	This is a debug message`
-- json：输出为 json 格式，例如：`{"level":"debug","time":"2020-12-05 08:12:54.113","caller":"example/example.go:43","msg":"This is a debug message"}`
+Format：支持 `console` 和 `json` 2 种格式：
+- console：输出为 text 格式。
+- json：输出为 json 格式。
 
-OutputPaths，可以设置日志输出：
+OutputPaths，支持同时输出到多个输出，可以设置日志输出：
 - stdout：输出到标准输出。
 - stderr：输出到标准错误输出。
 - /var/log/test.log：输出到文件。
-
-支持同时输出到多个输出。
 
 EnableColor 为 `true` 开启颜色输出，为 `false` 关闭颜色输出。
 
 ### 结构化日志输出
 
-`marmotedu/log` 也支持结构化日志打印，例如：
+支持结构化日志打印，例如：
 
 ```go
 log.Info("This is a info message", log.Int32("int_key", 10))
@@ -95,7 +92,9 @@ log.Infow("Message printed with Errorw", "X-Request-ID", "fbf54504-64da-4088-9b8
 2020-12-05 08:16:18.749	ERROR	example/example.go:46	Message printed with Errorw	{"X-Request-ID": "fbf54504-64da-4088-9b86-67824a7fb508"}
 ```
 
-log.Info 这类函数需要指定具体的类型，以最大化的 提高日志的性能。log.Infow 这类函数，不用指定具体的类型，底层使用了反射，性能会差些。建议用在低频调用的函数中。
+- log.Info() 需要指定具体的类型，以最大化的提高日志的性能。
+- log.Infow() 不用指定具体的类型，底层使用了反射，性能会差些，建议用在低频调用中。
+
 
 ## 支持V level
 
@@ -105,7 +104,7 @@ log.Info 这类函数需要指定具体的类型，以最大化的 提高日志�
 package main
 
 import (
-    "github.com/marmotedu/iam/pkg/log"
+    "github.com/rebirthmonkey/pkg/log"
 )
 
 func main() {
@@ -124,6 +123,7 @@ $ go run v_level.go
 2020-12-05 08:20:37.763	info	example/v_level.go:11	This is a V level message with fields	{"X-Request-ID": "7a7b9f24-4cae-4b2a-9464-69088b45b904"}
 ```
 
-## 完整的示例
+## Examples
 
-一个完整的示例请参考[example.go](./examples/example.go)。
+- [example1.go](examples/example1.go)
+- [example2.go](examples/example2.go)
