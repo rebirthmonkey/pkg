@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/rebirthmonkey/pkg/wklog"
+	//"github.com/rebirthmonkey/pkg/wklog"
+	wklog "github.com/marmotedu/gopractise-demo/log/cuslog"
 	"os"
 )
 
