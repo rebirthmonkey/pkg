@@ -7,6 +7,10 @@
 package productinfo
 
 import (
+	context "context"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -235,4 +239,124 @@ func file_ProductInfo_proto_init() {
 	file_ProductInfo_proto_rawDesc = nil
 	file_ProductInfo_proto_goTypes = nil
 	file_ProductInfo_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// ProductInfoClient is the client API for ProductInfo service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type ProductInfoClient interface {
+	//添加商品
+	AddProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*ProductId, error)
+	//获取商品
+	GetProduct(ctx context.Context, in *ProductId, opts ...grpc.CallOption) (*Product, error)
+}
+
+type productInfoClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewProductInfoClient(cc grpc.ClientConnInterface) ProductInfoClient {
+	return &productInfoClient{cc}
+}
+
+func (c *productInfoClient) AddProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*ProductId, error) {
+	out := new(ProductId)
+	err := c.cc.Invoke(ctx, "/productinfo.ProductInfo/addProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productInfoClient) GetProduct(ctx context.Context, in *ProductId, opts ...grpc.CallOption) (*Product, error) {
+	out := new(Product)
+	err := c.cc.Invoke(ctx, "/productinfo.ProductInfo/getProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ProductInfoServer is the server API for ProductInfo service.
+type ProductInfoServer interface {
+	//添加商品
+	AddProduct(context.Context, *Product) (*ProductId, error)
+	//获取商品
+	GetProduct(context.Context, *ProductId) (*Product, error)
+}
+
+// UnimplementedProductInfoServer can be embedded to have forward compatible implementations.
+type UnimplementedProductInfoServer struct {
+}
+
+func (*UnimplementedProductInfoServer) AddProduct(context.Context, *Product) (*ProductId, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddProduct not implemented")
+}
+func (*UnimplementedProductInfoServer) GetProduct(context.Context, *ProductId) (*Product, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProduct not implemented")
+}
+
+func RegisterProductInfoServer(s *grpc.Server, srv ProductInfoServer) {
+	s.RegisterService(&_ProductInfo_serviceDesc, srv)
+}
+
+func _ProductInfo_AddProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Product)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductInfoServer).AddProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/productinfo.ProductInfo/AddProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductInfoServer).AddProduct(ctx, req.(*Product))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductInfo_GetProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProductId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductInfoServer).GetProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/productinfo.ProductInfo/GetProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductInfoServer).GetProduct(ctx, req.(*ProductId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _ProductInfo_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "productinfo.ProductInfo",
+	HandlerType: (*ProductInfoServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "addProduct",
+			Handler:    _ProductInfo_AddProduct_Handler,
+		},
+		{
+			MethodName: "getProduct",
+			Handler:    _ProductInfo_GetProduct_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "ProductInfo.proto",
 }
