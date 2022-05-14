@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/marmotedu/component-base v1.6.2
 	github.com/marmotedu/iam v1.6.2
+	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/pflag v1.0.5
 	go.uber.org/zap v1.21.0
